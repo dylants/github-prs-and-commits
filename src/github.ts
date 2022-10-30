@@ -14,7 +14,7 @@ interface GitHubPullRequestCommits {
   sha: string;
 }
 
-interface PullRequestInfo {
+export interface PullRequestInfo {
   id: number;
   number: number;
   title: string;
@@ -42,7 +42,7 @@ function loadAdditionalData(
   });
 }
 
-async function loadPullRequestInfos(
+export async function loadPullRequestInfos(
   owner: string,
   repo: string
 ): Promise<PullRequestInfo[]> {
@@ -50,25 +50,9 @@ async function loadPullRequestInfos(
     `https://api.github.com/repos/${owner}/${repo}/pulls`
   );
   const pullRequests: GitHubPullRequest[] = await res.json();
-  console.log(pullRequests);
   const pullRequestInfoResolvers = pullRequests.map((pr) =>
     loadAdditionalData(pr)
   );
 
   return Promise.all(pullRequestInfoResolvers);
 }
-
-const owner = 'selfrefactor';
-const repo = 'rambda';
-// const owner = 'atom';
-// const repo = 'atom';
-// const owner = 'dylants';
-// const repo = 'puzzle-piece';
-// const owner = 'dylants';
-// const repo = 'fake';
-// const owner = 'bad&data';
-// const repo = 'fake';
-
-loadPullRequestInfos(owner, repo).then((infos) => {
-  console.log(infos);
-});
