@@ -4,7 +4,7 @@ import { loadPullRequestInfos, PullRequestInfo } from './github';
 const app = express();
 const port = 3000;
 
-app.get('/', (req, res) => {
+app.get('/pull-requests', (req, res) => {
   const owner = req.query.owner?.toString() || 'dylants';
   const repo = req.query.repo?.toString() || 'puzzle-piece';
   loadPullRequestInfos(owner, repo).then((infos: PullRequestInfo[]) => {

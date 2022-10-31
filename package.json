@@ -15,7 +15,7 @@
     "clean": "yarn clean:build && yarn clean:dependencies",
     "lint": "eslint .",
     "prod": "node build/server",
-    "pull-request": "ts-node src/command",
+    "pull-requests": "ts-node src/command",
     "start": "nodemon",
     "test": "yarn lint"
   },
