@@ -30,8 +30,6 @@ Navigate to http://localhost:3000/api/pull-requests using the query parameters `
 
 http://localhost:3000/api/pull-requests?owner=atom&repo=atom
 
-If you do not specify an owner or repo, it will use the defaults: `dylants` and `puzzle-piece`.
-
 ### Command Line
 
 Use the `yarn pull-requests` command:

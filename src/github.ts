@@ -1,4 +1,6 @@
 import fetch from 'cross-fetch';
+import config from '../config';
+import GitHubAPIError from './GitHubAPIError';
 
 interface GitHubPullRequest {
   id: number;
@@ -14,20 +16,21 @@ interface GitHubPullRequestCommits {
   sha: string;
 }
 
-export interface PullRequestInfo {
-  id: number;
-  number: number;
-  title: string;
-  author: string;
-  commit_count: number;
-}
-
 function loadAdditionalData(
   pullRequest: GitHubPullRequest
 ): Promise<PullRequestInfo> {
-  return new Promise<PullRequestInfo>((resolve) => {
+  return new Promise<PullRequestInfo>((resolve, reject) => {
     fetch(pullRequest.commits_url)
-      .then((res) => res.json() as unknown as GitHubPullRequestCommits[])
+      .then((res) => {
+        if (res.status !== 200) {
+          throw new GitHubAPIError(
+            res.status,
+            `GitHub commits API failed, status text: ${res.statusText}`
+          );
+        }
+
+        return res.json() as unknown as GitHubPullRequestCommits[];
+      })
       .then((pullRequestCommits) => {
         const commit_count: number = pullRequestCommits.length;
         return resolve({
@@ -38,8 +41,17 @@ function loadAdditionalData(
           author: pullRequest.user.login,
           commit_count,
         });
-      });
+      })
+      .catch(reject);
   });
+}
+
+export interface PullRequestInfo {
+  id: number;
+  number: number;
+  title: string;
+  author: string;
+  commit_count: number;
 }
 
 export async function loadPullRequestInfos(
@@ -47,8 +59,15 @@ export async function loadPullRequestInfos(
   repo: string
 ): Promise<PullRequestInfo[]> {
   const res = await fetch(
-    `https://api.github.com/repos/${owner}/${repo}/pulls`
+    `${config.github_api.url}/repos/${owner}/${repo}/pulls`
   );
+  if (res.status !== 200) {
+    throw new GitHubAPIError(
+      res.status,
+      `GitHub pulls API failed, status text: ${res.statusText}`
+    );
+  }
+
   const pullRequests: GitHubPullRequest[] = await res.json();
   const pullRequestInfoResolvers = pullRequests.map((pr) =>
     loadAdditionalData(pr)
