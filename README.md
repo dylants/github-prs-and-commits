@@ -26,9 +26,9 @@ Start the server:
 $ yarn start
 ```
 
-Navigate to http://localhost:3000/pull-requests using the query parameters `owner` and `repo` to specify the GitHub owner and repository. For example:
+Navigate to http://localhost:3000/api/pull-requests using the query parameters `owner` and `repo` to specify the GitHub owner and repository. For example:
 
-http://localhost:3000/pull-requests?owner=atom&repo=atom
+http://localhost:3000/api/pull-requests?owner=atom&repo=atom
 
 If you do not specify an owner or repo, it will use the defaults: `dylants` and `puzzle-piece`.
 
