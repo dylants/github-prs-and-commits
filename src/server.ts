@@ -2,7 +2,6 @@ import express from 'express';
 import config from '../config';
 
 const app = express();
-const port = config.port;
 
 /* ------------------------------------------ *
  * APIs
@@ -18,6 +17,6 @@ app.use('/api/*', (req, res) => res.status(404).end());
 /* ------------------------------------------ *
  * Start Express
  * ------------------------------------------ */
-app.listen(port, () => {
-  console.log(`Express server listening on port ${port}`);
+app.listen(config.port, () => {
+  console.log(`Express server listening on port ${config.port}`);
 });

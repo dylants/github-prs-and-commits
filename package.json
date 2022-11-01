@@ -3,18 +3,18 @@
   "version": "0.0.0",
   "description": "Returns info for the open PRs in a GitHub repo",
   "engines": {
-    "node": ">=18",
-    "yarn": "~1"
+    "node": "^18",
+    "yarn": "^1"
   },
   "private": true,
   "scripts": {
     "build:ts": "tsc",
     "build": "yarn clean:build && yarn build:ts",
-    "clean:build": "rimraf build",
+    "clean:build": "rimraf build coverage",
     "clean:dependencies": "rimraf node_modules",
     "clean": "yarn clean:build && yarn clean:dependencies",
     "lint": "eslint .",
-    "prod": "node build/server",
+    "prod": "node build/src/server",
     "pull-requests": "ts-node src/command",
     "start": "nodemon",
     "test": "jest",

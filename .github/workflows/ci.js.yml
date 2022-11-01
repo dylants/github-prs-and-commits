@@ -1,5 +1,5 @@
 # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-name: Node.js CI
+name: CI
 
 on:
   push:
@@ -28,3 +28,5 @@ jobs:
         run: yarn lint
       - name: Run tests
         run: yarn test
+      - name: Run build
+        run: yarn build
