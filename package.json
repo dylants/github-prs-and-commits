@@ -10,10 +10,12 @@
   "scripts": {
     "build:ts": "tsc",
     "build": "yarn clean:build && yarn build:ts",
+    "check-types": "tsc --noemit",
     "clean:build": "rimraf build coverage",
     "clean:dependencies": "rimraf node_modules",
     "clean": "yarn clean:build && yarn clean:dependencies",
-    "lint": "eslint .",
+    "eslint": "eslint .",
+    "lint": "yarn eslint && yarn check-types",
     "prod": "node build/src/server",
     "pull-requests": "ts-node src/command",
     "start": "nodemon",

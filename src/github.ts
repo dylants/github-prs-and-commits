@@ -16,34 +16,27 @@ interface GitHubPullRequestCommits {
   sha: string;
 }
 
-function loadAdditionalData(
+async function loadAdditionalData(
   pullRequest: GitHubPullRequest
 ): Promise<PullRequestInfo> {
-  return new Promise<PullRequestInfo>((resolve, reject) => {
-    fetch(pullRequest.commits_url)
-      .then((res) => {
-        if (res.status !== 200) {
-          throw new GitHubAPIError(
-            res.status,
-            `GitHub commits API failed, status text: ${res.statusText}`
-          );
-        }
+  const res = await fetch(pullRequest.commits_url);
+  if (res.status !== 200) {
+    throw new GitHubAPIError(
+      res.status,
+      `GitHub commits API failed, status text: ${res.statusText}`
+    );
+  }
 
-        return res.json() as unknown as GitHubPullRequestCommits[];
-      })
-      .then((pullRequestCommits) => {
-        const commit_count: number = pullRequestCommits.length;
-        return resolve({
-          id: pullRequest.id,
-          number: pullRequest.number,
-          title: pullRequest.title,
-          // eslint-disable-next-line sort-keys
-          author: pullRequest.user.login,
-          commit_count,
-        });
-      })
-      .catch(reject);
-  });
+  const pullRequestCommits: GitHubPullRequestCommits[] = await res.json();
+  const commit_count: number = pullRequestCommits.length;
+  return {
+    id: pullRequest.id,
+    number: pullRequest.number,
+    title: pullRequest.title,
+    // eslint-disable-next-line sort-keys
+    author: pullRequest.user.login,
+    commit_count,
+  };
 }
 
 export interface PullRequestInfo {
